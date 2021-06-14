@@ -10,9 +10,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+use App\Models\Message;
+use App\Models\User;
+
 class MessageSent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    /**
+     * User that sent the message
+     *
+     * @var User
+     */
+    public $user;
 
     /**
      * Message details
@@ -21,15 +31,15 @@ class MessageSent implements ShouldBroadcast
     */
     public $message;
 
-
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(string $message)
+    public function __construct(User $user, Message $message)
     {
         $this->message = $message;
+        $this->user = $user;
     }
 
     /**

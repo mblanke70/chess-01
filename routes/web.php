@@ -19,15 +19,24 @@ use App\Events\MessageSent;
 
 Route::get('/', function () {
     
-    $messages = Message::with('user')->get();
+    //$messages = Message::with('user')->get()
+    //    ->sortByDesc('created_at');
 
     return view('chat', [
-        'messages' => $messages,
+        //'messages' => $messages,
     ]);
+
 });
 
-Route::post('/sendMessage', function(Request $request) {
+Route::get('/messages', function () {
+    
+    return Message::with('user')->get()
+        ->sortByDesc('created_at');
 
+});
+
+Route::post('/messages', function(Request $request) {
+    
     $user = Auth::user();
 
     $message = new Message;
@@ -35,9 +44,10 @@ Route::post('/sendMessage', function(Request $request) {
     
     $user->messages()->save($message);
 
-    event(new App\Events\MessageSent($message->message));
+    event(new App\Events\MessageSent($user, $message));
 
-    return redirect('/');
+    return ['status' => 'Message Sent!'];
+
 });
 
 Auth::routes();
