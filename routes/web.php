@@ -26,7 +26,7 @@ Route::get('/', function () {
         //'messages' => $messages,
     ]);
 
-});
+})->middleware('auth');
 
 Route::get('/messages', function () {
     
@@ -51,5 +51,3 @@ Route::post('/messages', function(Request $request) {
 });
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
