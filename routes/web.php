@@ -22,7 +22,7 @@ Route::get('/', function () {
     //$messages = Message::with('user')->get()
     //    ->sortByDesc('created_at');
 
-    return view('chat', [
+    return view('chat2', [
         //'messages' => $messages,
     ]);
 
@@ -30,8 +30,8 @@ Route::get('/', function () {
 
 Route::get('/messages', function () {
     
-    return Message::with('user')->get()
-        ->sortByDesc('created_at');
+    return Message::with('user')->get();
+       // ->sortByDesc('created_at');
 
 });
 
@@ -44,7 +44,7 @@ Route::post('/messages', function(Request $request) {
     
     $user->messages()->save($message);
 
-    event(new App\Events\MessageSent($user, $message));
+    broadcast(new App\Events\MessageSent($user, $message))->toOthers();
 
     return ['status' => 'Message Sent!'];
 
